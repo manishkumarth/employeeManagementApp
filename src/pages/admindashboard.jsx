@@ -1,6 +1,5 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import Header from '../components/header';
-import { setlocalStorge } from '../utils/localstoageData';
 import EmployeCards from '../components/employeCards';
 import AddEmploye from '../components/addEmploye';
 import { empData } from '../components/contextApi/empdataContext';
@@ -10,194 +9,163 @@ function Admindashboard() {
     title: '',
     desc: '',
     status: '',
-    emp: "",
+    emp: '',
     asdate: '',
-    daddate: ''
-  })
-  const [isdata, setIsdata] = useState(false)
-  const { localDatas, setLocalDatas } = useContext(empData)
+    daddate: '',
+  });
+  const [isdata, setIsdata] = useState(false);
+  const { localDatas, setLocalDatas } = useContext(empData);
+
   const inputChange = (e) => {
-    const { name, value } = e.target
-    setTasks(prevData => ({ ...prevData, [name]: value }))
-  }
+    const { name, value } = e.target;
+    setTasks((prev) => ({ ...prev, [name]: value }));
+  };
 
-
-  function assgineTask() {
+  const assgineTask = () => {
     if (!tasks.title || !tasks.desc || !tasks.emp || !tasks.asdate || !tasks.daddate) {
-      alert("please enter your task details")
-      console.log(localDatas.empData)
-
-    } else {
-      console.log(tasks)
-
-      let updatedEmpData = localDatas.empData.map(emp => {
-        let i = emp.tasks.length + 1
-
-        console.log(i)
-        if (emp.id === tasks.emp) {
-
-          return {
-            ...emp, tasks: [...emp.tasks, {
-              title: tasks.title,
-              description: tasks.desc,
-              status: tasks.status,
-              id: "task10" + i,
-              assignedDate: tasks.asdate,
-              deadline: tasks.daddate
-            }]
-          }; // Append new task
-        }
-       
-        return emp;
-      });
-      // }
-      setLocalDatas(prevState => ({
-        ...prevState,
-        empData: updatedEmpData
-      }));
-      // localStorage.setItem("data"+i,JSON.stringify(tasks))
-    setTimeout(() => {
-      setTasks({
-        title: '',
-        desc: '',
-        status: '',
-        emp: "",
-        asdate: '',
-        daddate: ''})
-
-    }, 1000);
-    
+      return alert('Please enter all task details');
     }
-  }
-  function createNewEmp(){
-    if(isdata===true){
-      setIsdata(false)
-    }else{
-      setIsdata(true)
-    }
-   
-  }   
+
+    const updatedEmpData = localDatas.empData.map((emp) => {
+      if (emp.id === tasks.emp) {
+        const taskId = 'task10' + (emp.tasks.length + 1);
+        return {
+          ...emp,
+          tasks: [...emp.tasks, {
+            title: tasks.title,
+            description: tasks.desc,
+            status: tasks.status,
+            id: taskId,
+            assignedDate: tasks.asdate,
+            deadline: tasks.daddate,
+          }],
+        };
+      }
+      return emp;
+    });
+
+    setLocalDatas((prev) => ({
+      ...prev,
+      empData: updatedEmpData,
+    }));
+
+    setTasks({
+      title: '',
+      desc: '',
+      status: '',
+      emp: '',
+      asdate: '',
+      daddate: '',
+    });
+  };
 
   return (
     <>
       <Header />
-      <button onClick={createNewEmp} className='btn bg-gray-400 rounded'>Add New emp</button>
-   {isdata ?  <AddEmploye />:null}
-   
-      <div className='flex flex-col lg:flex-row md:flex-col justify-evenly w-full'>
-        <div className="max-w-4xl mx-auto p-4 bg-white rounded-lg shadow-lg w-full">
-          <h2 className="text-2xl font-semibold text-center mb-6">Assign Task</h2>
 
-          <div className="space-y-4">
-            {/* Task Title */}
-            <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-              <label htmlFor="task-title" className="sm:w-1/4 font-semibold">Task Title</label>
+      <div className="p-4 bg-gray-50 min-h-screen">
+        <div className="flex justify-between items-center mb-4">
+          <h1 className="text-2xl font-bold text-gray-800">Admin Dashboard</h1>
+          <button
+            onClick={() => setIsdata(!isdata)}
+            className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded shadow"
+          >
+            {isdata ? 'Close' : 'Add New Employee'}
+          </button>
+        </div>
+
+        {isdata && <AddEmploye />}
+
+        <div className="grid lg:grid-cols-2 gap-8 mt-6">
+          {/* Assign Task Card */}
+          <div className="bg-white p-6 rounded-lg shadow-md">
+            <h2 className="text-xl font-semibold mb-4 text-center">Assign Task</h2>
+            <div className="space-y-4">
               <input
                 type="text"
-                id="task-title"
-                name='title'
+                name="title"
                 value={tasks.title}
                 onChange={inputChange}
-                placeholder="Enter task title"
-                className="w-full sm:w-3/4 p-2 border border-gray-300 rounded-md"
+                placeholder="Task Title"
+                className="w-full p-2 border rounded-md"
               />
-            </div>
 
-            {/* Task Description */}
-            <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-              <label htmlFor="task-desc" className="sm:w-1/4 font-semibold">Task Description</label>
               <textarea
-                id="task-desc"
-                name='desc'
+                name="desc"
                 value={tasks.desc}
                 onChange={inputChange}
-                placeholder="Enter task description"
-                className="w-full sm:w-3/4 p-2 border border-gray-300 rounded-md"
+                placeholder="Task Description"
+                className="w-full p-2 border rounded-md"
               />
-            </div>
-            {/* status  */}
-            <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-              <label htmlFor="task-desc" className="sm:w-1/4 font-semibold">Status</label>
-              <textarea
-                id="task-desc"
-                name='status'
+
+              <input
+                type="text"
+                name="status"
                 value={tasks.status}
                 onChange={inputChange}
-                placeholder="Enter task status"
-                className="w-full sm:w-3/4 p-2 border border-gray-300 rounded-md"
+                placeholder="Task Status"
+                className="w-full p-2 border rounded-md"
               />
-            </div>
 
-            {/* Assign to Employee */}
-            <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-              <label htmlFor="assign-to" className="sm:w-1/4 font-semibold">Assign to Employee</label>
               <select
-                id="assign-to"
-                name='emp'
+                name="emp"
                 value={tasks.emp}
                 onChange={inputChange}
-                className="w-full sm:w-3/4 p-2 border border-gray-300 rounded-md"
+                className="w-full p-2 border rounded-md"
               >
-                <option value="">select</option>
-                {
-                  localDatas.empData.map((emp) => {
-                    return <option key={emp.id} value={emp.id}>{emp.id}</option>
-                  })
-                }
+                <option value="">Assign to</option>
+                {localDatas.empData.map((emp) => (
+                  <option key={emp.id} value={emp.id}>
+                    {emp.name} ({emp.id})
+                  </option>
+                ))}
               </select>
-            </div>
 
-            {/* Task Assign Date */}
-            <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-              <label htmlFor="task-assign-date" className="sm:w-1/4 font-semibold">Task Assign Date</label>
-              <input
-                type="date"
-                id="task-assign-date"
-                name='asdate'
-                value={tasks.asdate}
-                onChange={inputChange}
-                className="w-full sm:w-3/4 p-2 border border-gray-300 rounded-md"
-              />
-            </div>
+              <div className="flex gap-4">
+                <input
+                  type="date"
+                  name="asdate"
+                  value={tasks.asdate}
+                  onChange={inputChange}
+                  className="w-full p-2 border rounded-md"
+                />
+                <input
+                  type="date"
+                  name="daddate"
+                  value={tasks.daddate}
+                  onChange={inputChange}
+                  className="w-full p-2 border rounded-md"
+                />
+              </div>
 
-            {/* Deadline Date */}
-            <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-              <label htmlFor="deadline-date" className="sm:w-1/4 font-semibold">Deadline Date</label>
-              <input
-                type="date"
-                id="deadline-date"
-                name='daddate'
-                value={tasks.daddate}
-                onChange={inputChange}
-                className="w-full sm:w-3/4 p-2 border border-gray-300 rounded-md"
-              />
-            </div>
-
-            {/* Assign Task Button */}
-            <div className="flex justify-center mt-6">
-              <button onClick={assgineTask} className="bg-blue-400 p-2 rounded-md text-white hover:bg-blue-500 transition duration-300">
+              <button
+                onClick={assgineTask}
+                className="w-full bg-blue-500 hover:bg-blue-600 text-white p-2 rounded-md transition"
+              >
                 Assign Task
               </button>
             </div>
           </div>
-        </div>
-        {/* right side employee Cards   */}
-        <div id='employeside-bar' className='flex lg:flex-col md:flex-row overflow-auto border-2 h-55 lg:w-50 w-full md:w-full rounded'>
-          {
-            localDatas.empData.map(item => (
-              <EmployeCards
-                key={item.id}
-                empname={item.name}
-                email={item.email}
-                pass={item.password}
-                tasks={item.tasks.length}
-              />
-            ))
-          }
 
+          {/* Employee Cards Panel */}
+          <div className="bg-white p-4 rounded-lg shadow-md overflow-y-auto max-h-[500px]">
+            <h2 className="text-xl font-semibold text-center mb-4">Employee List</h2>
+            {localDatas.empData.length > 0 ? (
+              localDatas.empData.map((item) => (
+                <EmployeCards
+                  key={item.id}
+                  empname={item.name}
+                  email={item.email}
+                  pass={item.password}
+                  tasks={item.tasks.length}
+                />
+              ))
+            ) : (
+              <p className="text-center text-gray-500">No employees available.</p>
+            )}
+          </div>
         </div>
       </div>
-
     </>
   );
 }
