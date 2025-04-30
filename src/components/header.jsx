@@ -14,11 +14,11 @@ function Header() {
         setShoProfile(!showProfil)
     }
     return (
-        <div className="flex justify-between px-6 bg-gray-300 ">
+        <div className="flex justify-between h-10 px-6 bg-gray-300 ">
             <div className={`slide-on ${showProfil? 'slide-in' : 'slid-out'} `}>
             <UserProfile className="slide-on" />
             </div>
-            <button onClick={handleTogle} className='cursor-pointer border rounded-full h-[5vw] w-[5vw] bg-red-400'>{userData.name.split(' ').map((name)=>(name[0].toUpperCase())).join()}</button>
+            <button onClick={handleTogle} className='cursor-pointer border rounded-full h-[2vw] w-[2vw] bg-red-400'>{userData.name.split(' ').map((name)=>(name[0].toUpperCase())).join()}</button>
             <div><h1>Hey {userData.name}!</h1></div>
             <div><button onClick={logOUt} className="btn bg-red-600 rounded-xl p-2">LogOut</button></div>
         </div>
