@@ -3,6 +3,7 @@ import Header from '../components/header';
 import EmployeCards from '../components/employeCards';
 import AddEmploye from '../components/addEmploye';
 import { empData } from '../components/contextApi/empdataContext';
+import toast from 'react-hot-toast';
 
 function Admindashboard() {
   const [tasks, setTasks] = useState({
@@ -22,9 +23,28 @@ function Admindashboard() {
   };
 
   const assgineTask = () => {
-    if (!tasks.title || !tasks.desc || !tasks.emp || !tasks.asdate || !tasks.daddate) {
-      return alert('Please enter all task details');
-    }
+    if(!tasks.title){
+      toast.error("enter task title")
+      return
+    }else if(!tasks.desc){
+      toast.error("enter task details")
+      return
+    }else if(!tasks.status){
+      toast.error("enter task status")
+      return
+    }else if(!tasks.emp){
+      toast.error("select employee")
+      return
+    }else if(!tasks.asdate){
+      toast.error("enter assigne date")
+      return
+    }else if(!tasks.daddate){
+      toast.error("enter end date")
+      return
+    }else{
+      toast.success("new task added to",tasks.emp)
+    } 
+
 
     const updatedEmpData = localDatas.empData.map((emp) => {
       if (emp.id === tasks.emp) {

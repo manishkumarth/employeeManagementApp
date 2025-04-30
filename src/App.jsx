@@ -6,6 +6,7 @@ import AuthProvider from './components/contextApi/authContext'
 import UserDataProvider from './components/contextApi/userDataContext'
 import { admin, employees, setlocalStorge } from './utils/localstoageData'
 import { useEffect } from 'react'
+import { Toaster } from 'react-hot-toast'
 
 function App() {
  useEffect(() => {
@@ -17,6 +18,7 @@ function App() {
     <EmpdataContext>
       <AuthProvider>
         <UserDataProvider >
+          <Toaster />
           <Home />
         </UserDataProvider>
       </AuthProvider>
