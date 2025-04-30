@@ -1,0 +1,1 @@
+#task-list::-webkit-scrollbar{display:none}.slide-on{position:relative;transition:transform .3s ease-in-out;transform:translateY(-100%)}.slide-in{transform:translateY(0)}.slide-out{transform:translateY(-100%)}#employeside-bar::-webkit-scrollbar{display:none}
